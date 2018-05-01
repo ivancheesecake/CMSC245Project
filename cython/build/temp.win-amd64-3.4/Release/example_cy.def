@@ -1,0 +1,3 @@
+LIBRARY example_cy.pyd
+EXPORTS
+PyInit_example_cy

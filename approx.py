@@ -44,7 +44,7 @@ def ramsey(G):
 	else:
 		nodes = list(G.nodes())
 		v = nodes[random.randint(0,len(nodes)-1)]
-	
+
 		all_neighbors_iter = nx.all_neighbors(G,v)
 		non_neighbors_iter = nx.non_neighbors(G,v)
 
@@ -130,18 +130,18 @@ def pickMe(G,ISize):
 			INodes.append(pick)
 			nodes.remove(pick)
 
-	
+
 	return GCopy.subgraph(INodes)
 
 def nayana(G,I):
-	
+
 	GCopy = copy.deepcopy(G)
 	INodes = list(I.nodes())
 
 	neighbors = []
 
 	for node in INodes:
-		
+
 		neighbors += list(GCopy.neighbors(node))
 		GCopy.remove_node(node)
 	GCopy.remove_nodes_from(neighbors)
@@ -171,13 +171,13 @@ def SampleIS(G,n,k):
 			if isIndependent(I):
 				NBar = nayana(G,I)
 				# print("IsIndepentent",NBar.nodes())
-				# print(n)	
+				# print(n)
 				if NBar.number_of_nodes() >= int((n/k) * (math.log(n/2,2) * (math.log(math.log(n,2),2)))):
-					
+
 					sampleis, go =  SampleIS(NBar,n,k)
-					
+
 					if go:
-						
+
 						return nx.union(I, sampleis), True
 					else:
 						break
@@ -192,7 +192,7 @@ def SampleIS(G,n,k):
 					# print(I2.nodes())
 					# print((math.log(n,2)**3)/(6*math.log(math.log(n,2),2)))
 					if I2.number_of_nodes() >= int((math.log(n/6,2)**3)*(math.log(math.log(n,2),2))):
-						
+
 						# I2_2 = I2.copy()
 
 						# intersect = nx.intersection(I,I2)
@@ -214,6 +214,7 @@ def SampleIS(G,n,k):
 			# else:
 				# print("DI MAKAMOVEON")
 	return nx.Graph(),False
+
 def coloring(G,k):
 
 	GCopy = G.copy()
@@ -226,11 +227,11 @@ def coloring(G,k):
 		j = 1
 		valid = False
 
-		while j<1000:
-			print("Trial", j)
-			IS,valid = SampleIS(GCopy,GCopy.number_of_nodes(),k)
-			j+=1
-			
+		# while j<1000:
+		# print("Trial", j)
+		IS,valid = SampleIS(GCopy,GCopy.number_of_nodes(),k)
+		j+=1
+
 		if not valid:
 			return output
 		# print("IS",IS.nodes())
@@ -247,34 +248,34 @@ def coloring(G,k):
 
 
 
-G = loadGraph('toy1.txt')
-# G = loadGraph('dsjc500.1.col.txt')
+# G = loadGraph('toy1.txt')
+G = loadGraph('dsjc500.1.col.txt')
 # G = nx.gnm_random_graph(50,100,seed=10)
 GCopy = copy.deepcopy(G)
 GViz = list(G.nodes())
 
 # visualizeBasic(G)
 # print(SampleIS(G,2)[0].nodes())
-coloring_output = coloring(G,2)
+coloring_output = coloring(G,20)
 print(coloring_output)
 
 
-# colors =[]
-# for node in GCopy:
-# 	colors.append(coloring_output[node])
+colors =[]
+for node in GCopy:
+	colors.append(coloring_output[node])
 
-# # print(GViz)
-# # print(independentSetList)
-# print(colors)
+# print(GViz)
+# print(independentSetList)
+print(colors)
 
-# # Graph Visualization
+# Graph Visualization
 
-# plt.subplot(121)
-# labels={}
-# for node in GCopy.nodes():
-# 	labels[node] = node
+plt.subplot(121)
+labels={}
+for node in GCopy.nodes():
+	labels[node] = node
 
-# pos = nx.nx_agraph.graphviz_layout(GCopy)
+pos = nx.nx_agraph.graphviz_layout(GCopy)
 
-# nx.draw(GCopy,pos=pos,node_color=colors)
-# plt.show()
+nx.draw(GCopy,pos=pos,node_color=colors)
+plt.show()
