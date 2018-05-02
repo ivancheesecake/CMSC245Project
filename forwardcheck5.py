@@ -209,7 +209,7 @@ def wipesOut(G,u,domains,color,coloration):
 	# print("color =",color)
 	# print("domain",domains[u])
 	# domainsCopy = copy.deepcopy(domains)
-	neighbors = G.neighbors(u)
+	# neighbors = G.neighbors(u)
 
 	# if coloration[u] == 0:
 	# 	return True
@@ -224,7 +224,7 @@ def wipesOut(G,u,domains,color,coloration):
 		# 	# print("Except")
 		# 	pass
 
-		if(len(domains[neighbor])==1 and coloration[neighbor]==0):
+		if(len(domains[neighbor]) == 1 and coloration[neighbor]==0):
 			# print("TRUE")
 			return True
 	# print("FALSE")
@@ -240,7 +240,9 @@ def getD(G,u,domains,coloration):
 		neighbor_colors.append(coloration[neighbor])
 
 	for color in domains[u]:
+
 		if not wipesOut(G,u,domains,color,coloration) and color not in neighbor_colors:
+		# if not wipesOut(G,u,domains,color,coloration):
 			D.append(color)
 
 	return D
@@ -263,15 +265,25 @@ def FCNS(G,B,k,verbose=True):
 
 	counter = 1
 
-	while len(U)!=0:
+	# while len(U)!=0:
+	while counter < 20:
 		# if verbose:
 		print("Iteration #",counter)
+		print("C",C)
+		print("U",U)
 		print(len(U))
+		print("Coloration: ",coloration)
+
+
 
 		# print(1)
 		# u = UVERTEX(U,domains)
 		# G,U,domains,k,coloration
 		u = UVERTEX_BRELAZ(G,U,domains,k,coloration)
+		
+
+		print(domains[u])
+
 		# print(2)
 		D = getD(G,u,domains,coloration)
 		# print("u",u)
@@ -294,6 +306,9 @@ def FCNS(G,B,k,verbose=True):
 			for i in range(min(B,len(C))):
 				c = CVERTEX_BRELAZ(G,C,domains,n,k,coloration);
 				# c = CVERTEX(C,domains,n)
+				
+				print("IMMA UNCOLOR",c)
+
 				preferDifferent = True
 
 				if verbose:
@@ -334,8 +349,8 @@ def FCNS(G,B,k,verbose=True):
 
 				# if past_color not in neighbor_colors:
 				# 	domains[c].append(past_color)
-
-				# domains[c].append(past_color)
+				# if past_color not in domains[c]:
+				# 	domains[c].append(past_color)
 
 
 				C.remove(c)
@@ -350,6 +365,7 @@ def FCNS(G,B,k,verbose=True):
 
 		else:
 			# color u to COLOR(D),update domains
+			print("IMMA COLOR",u)
 			
 			# color = COLOR(D,preferDifferent,past_coloration[u])
 			color = COLOR_SIMPLE(D)
@@ -412,6 +428,10 @@ G = loadGraph('toy1.txt')
 # G.add_edge(2,5)
 # G.add_edge(3,5)
 # G = loadGraph('dsjc500.1.col.txt')
+# G = loadGraph('myciel3.col.txt')
+# G = loadGraph('myciel4.col.txt')
+# G = loadGraph('myciel5.col.txt')
+G = loadGraph('queen5_5.col.txt')
 # G = loadGraph('le450_5a.col.txt')
 # G = nx.gnm_random_graph(100,300,seed=10)
 # G = nx.gnm_random_graph(8,18,seed=10)
@@ -447,7 +467,7 @@ coloration ={}
 # 	print(t1-t0)
 
 t0 = time.time()
-coloration = FCNS(G,1,15,verbose=False)
+coloration = FCNS(G,1,5,verbose=False)
 t1 = time.time()
 print(t1-t0)
 
